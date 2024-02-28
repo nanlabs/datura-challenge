@@ -1,0 +1,32 @@
+version: '3.8'
+
+volumes:
+  subtensor-volume:
+  bitensor-volume:
+
+services:
+  common-subtensor: &common-subtensor
+    build:
+      context: ./docker/subtensor
+      dockerfile: Dockerfile
+    cpu_count: 4
+    mem_limit: 40000000000
+    memswap_limit: 80000000000
+
+  subtensor:
+    <<: *common-subtensor
+    volumes:
+      - subtensor-volume:/tmp/blockchain
+
+  common-bittensor: &common-bittensor
+    build:
+      context: .
+      dockerfile: Dockerfile
+    cpu_count: 4
+    mem_limit: 40000000000
+    memswap_limit: 80000000000
+
+  bittensor-dev:
+    <<: *common-bittensor
+    volumes:
+      - bitensor-volume:/tmp/bittensor
